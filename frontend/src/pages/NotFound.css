@@ -1,0 +1,29 @@
+.not-found {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 1rem 3rem;
+}
+
+.not-found-card {
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+
+.not-found-card svg {
+  color: var(--gold);
+  margin-bottom: 1rem;
+}
+
+.not-found-card h2 {
+  font-family: var(--font-sans);
+  margin-bottom: 0.5rem;
+}
+
+.not-found-card p {
+  font-size: var(--body-sm);
+  color: var(--text-tertiary);
+  margin-bottom: 1.5rem;
+}

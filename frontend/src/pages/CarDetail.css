@@ -1,0 +1,197 @@
+.detail-page {
+  padding-top: 6rem;
+  padding-bottom: 3rem;
+}
+
+.detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--text-secondary) !important;
+  font-size: var(--body-sm);
+  margin-bottom: 2rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.detail-back:hover {
+  color: var(--gold) !important;
+  background: var(--bg-card);
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2rem;
+  align-items: start;
+}
+
+.detail-image {
+  position: relative;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  aspect-ratio: 16 / 9;
+}
+
+.detail-image img {
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform var(--transition-slow);
+}
+
+.detail-image:hover img {
+  transform: scale(1.05);
+}
+
+.detail-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail-spec-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-secondary);
+}
+
+.detail-spec-item svg {
+  color: var(--gold);
+  margin-bottom: 0.25rem;
+}
+
+.detail-spec-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+}
+
+.detail-spec-value {
+  font-size: var(--body-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.detail-description h3 {
+  font-family: var(--font-sans);
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.detail-description p {
+  line-height: 1.7;
+}
+
+/* Sidebar */
+.detail-sidebar {
+  position: sticky;
+  top: 6rem;
+}
+
+.detail-price-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+}
+
+.detail-price {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-price-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.detail-price-label {
+  font-size: var(--body-sm);
+  color: var(--text-tertiary);
+  margin-left: 0.25rem;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.booking-field input {
+  width: 100%;
+}
+
+.booking-summary {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.booking-summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--body-sm);
+  padding: 0.25rem 0;
+  color: var(--text-secondary);
+}
+
+.booking-total {
+  border-top: 1px solid var(--border);
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.booking-success {
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.booking-success svg {
+  color: #22C55E;
+  margin-bottom: 0.5rem;
+}
+
+.booking-success h3 {
+  font-family: var(--font-sans);
+  margin-bottom: 0.5rem;
+}
+
+.booking-success p {
+  font-size: var(--body-sm);
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 900px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-sidebar {
+    position: static;
+  }
+
+  .detail-specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
