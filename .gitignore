@@ -3,3 +3,5 @@ dist/
 .env.local
 convex/_generated/
 agent-scripts/
+.env
+.env.example
