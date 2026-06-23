@@ -42,3 +42,4 @@ npm run dev          # Start Vite dev server
 | `npm run lint` | Run ESLint |
 | `npm run convex` | Run Convex CLI |
 | `npm run seed` | Seed database with initial data |
+# cruise
