@@ -21,8 +21,9 @@ export default function CarDetail() {
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const [paymentBooking, setPaymentBooking] = useState(null);
   const [paid, setPaid] = useState(false);
+  const [error, setError] = useState('');
 
-  if (!car) {
+  if (!car && car !== undefined) {
     return (
       <div className="container section" style={{ textAlign: 'center', paddingTop: '8rem' }}>
         <Icon name="car" size={64} />
@@ -30,6 +31,14 @@ export default function CarDetail() {
         <Link to="/fleet" className="btn-primary" style={{ marginTop: '1rem' }}>
           Back to Fleet
         </Link>
+      </div>
+    );
+  }
+
+  if (!car) {
+    return (
+      <div className="container section" style={{ textAlign: 'center', paddingTop: '8rem' }}>
+        <p>Loading...</p>
       </div>
     );
   }
@@ -46,10 +55,7 @@ export default function CarDetail() {
     if (days < 1) return;
 
     const bookingPayload = {
-      userId: user.id,
-      userName: user.name,
-      userEmail: user.email,
-      carId: car._id ?? String(car.id),
+      carId: car._id,
       carMake: car.make,
       carModel: car.model,
       carImage: car.image,
@@ -63,18 +69,19 @@ export default function CarDetail() {
     try {
       const booking = await createBooking(bookingPayload);
       setPaymentBooking(booking);
-    } catch {
-      // fallback handled by api/bookings
+      setError('');
+    } catch (err) {
+      setError(err.message || 'Booking failed. Please try again.');
     }
   };
 
   const handlePaymentComplete = async () => {
     try {
       await processPayment(paymentBooking._id);
+      setPaid(true);
     } catch {
-      // fallback handled by api/bookings
+      // payment processing failed silently
     }
-    setPaid(true);
     setPaymentBooking(null);
     setBookingSuccess(true);
   };
@@ -195,6 +202,8 @@ export default function CarDetail() {
                       </div>
                     </div>
                   )}
+
+                  {error && <p className="payment-error">{error}</p>}
 
                   <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                     {user ? 'Confirm Booking' : 'Sign In to Book'}

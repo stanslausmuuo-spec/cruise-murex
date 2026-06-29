@@ -1,22 +1,19 @@
 import { useQuery } from 'convex/react';
-import cars from '../data/cars';
 
 export function useCars() {
-  const result = useQuery('cars:list');
-  return result ?? cars;
+  return useQuery('cars:list') ?? [];
 }
 
 export function useCar(id) {
-  const result = useQuery('cars:getById', { id });
-  return result ?? cars.find(c => String(c.id) === id) ?? null;
+  return useQuery('cars:getById', { id });
 }
 
 export function useFeaturedCars() {
   const result = useQuery('cars:getFeatured');
-  return result ?? cars.filter(c => c.featured).slice(0, 3);
+  return result ?? [];
 }
 
 export function useCategories() {
   const result = useQuery('cars:getCategories');
-  return result ?? [...new Set(cars.map(c => c.category))];
+  return result ?? [];
 }

@@ -10,7 +10,7 @@ export default function Dashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const bookings = useUserBookings(user?.id);
+  const bookings = useUserBookings();
   const processPayment = useProcessPayment();
 
   const [paymentBooking, setPaymentBooking] = useState(null);
@@ -28,7 +28,7 @@ export default function Dashboard() {
     try {
       await processPayment(paymentBooking._id);
     } catch {
-      // fallback handled by api/bookings
+      // payment failed silently
     }
     setPaymentBooking(null);
   };
@@ -64,13 +64,17 @@ export default function Dashboard() {
               </>
             ) : (
               <div className="dashboard-booking-list">
-                {bookings.map(b => (
-                  <div key={b._id ?? b.id} className="dashboard-booking-item">
+                {bookings.map((b) => (
+                  <div key={b._id} className="dashboard-booking-item">
                     <div className="dashboard-booking-top">
                       <img src={b.carImage} alt="" className="dashboard-booking-img" />
                       <div className="dashboard-booking-info">
-                        <strong>{b.carMake} {b.carModel}</strong>
-                        <span>{b.startDate} → {b.endDate}</span>
+                        <strong>
+                          {b.carMake} {b.carModel}
+                        </strong>
+                        <span>
+                          {b.startDate} → {b.endDate}
+                        </span>
                         <span className="dashboard-booking-total">${b.total.toLocaleString()}</span>
                       </div>
                       <span className={`dashboard-booking-badge ${b.paymentStatus}`}>
@@ -93,16 +97,25 @@ export default function Dashboard() {
             <Icon name="user" size={24} />
             <h3>Profile</h3>
             <div className="dashboard-info">
-              <span><strong>Name:</strong> {user?.name}</span>
-              <span><strong>Email:</strong> {user?.email}</span>
-              <span><strong>Role:</strong> {user?.role}</span>
+              <span>
+                <strong>Name:</strong> {user?.name}
+              </span>
+              <span>
+                <strong>Email:</strong> {user?.email}
+              </span>
+              <span>
+                <strong>Role:</strong> {user?.role}
+              </span>
             </div>
           </div>
 
           <div className="dashboard-card">
             <Icon name="shield" size={24} />
             <h3>Membership</h3>
-            <p>Premium member since {new Date().getFullYear()}. Enjoy priority booking and exclusive access.</p>
+            <p>
+              Premium member since {new Date().getFullYear()}. Enjoy priority
+              booking and exclusive access.
+            </p>
           </div>
 
           <div className="dashboard-card dashboard-card-wide">
@@ -114,8 +127,8 @@ export default function Dashboard() {
               </div>
             ) : (
               <div className="dashboard-activity-list">
-                {bookings.slice(0, 5).map(b => (
-                  <div key={b._id ?? b.id} className="dashboard-activity-item">
+                {bookings.slice(0, 5).map((b) => (
+                  <div key={b._id} className="dashboard-activity-item">
                     <Icon name={b.paymentStatus === 'paid' ? 'check' : 'calendar'} size={16} />
                     <span>
                       {b.paymentStatus === 'paid' ? 'Paid for ' : 'Booked '}

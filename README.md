@@ -19,18 +19,9 @@ cruise/
 ```bash
 npm install
 npm run convex dev   # Start Convex dev server (one-time setup)
-npm run seed         # Seed database with cars + demo users
+npm run seed         # Seed database with demo data
 npm run dev          # Start Vite dev server
 ```
-
-## TODO
-
-- **`convex/` → `backend/convex/`** — if the Convex CLI ever adds a `--convex-dir` flag, move the backend under `backend/` so root only contains frontend config and tooling files.
-
-## Demo Credentials
-
-- **Admin:** admin@cruise.com / admin123
-- **User:** jane@example.com / password123
 
 ## Scripts
 
@@ -42,4 +33,3 @@ npm run dev          # Start Vite dev server
 | `npm run lint` | Run ESLint |
 | `npm run convex` | Run Convex CLI |
 | `npm run seed` | Seed database with initial data |
-# cruise

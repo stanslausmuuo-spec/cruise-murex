@@ -10,6 +10,7 @@ export default defineSchema({
     dailyRate: v.number(),
     seats: v.number(),
     fuelType: v.string(),
+    transmission: v.optional(v.string()),
     speed: v.string(),
     description: v.string(),
     image: v.string(),
@@ -22,7 +23,8 @@ export default defineSchema({
     email: v.string(),
     password: v.string(),
     role: v.optional(v.string()),
-  }).index('by_email', ['email']),
+    token: v.optional(v.string()),
+  }).index('by_email', ['email']).index('by_token', ['token']),
 
   bookings: defineTable({
     userId: v.id('users'),

@@ -11,8 +11,10 @@ export default function Admin() {
   const carList = useCars();
 
   const totalBookings = bookings.length;
-  const totalUsers = 2;
-  const totalRevenue = bookings.reduce((sum, b) => sum + (b.paymentStatus === 'paid' ? b.total : 0), 0);
+  const totalRevenue = bookings.reduce(
+    (sum, b) => sum + (b.paymentStatus === 'paid' ? b.total : 0),
+    0,
+  );
 
   return (
     <main className="admin-page">
@@ -41,16 +43,11 @@ export default function Admin() {
             </div>
           </div>
           <div className="admin-stat-card">
-            <Icon name="user" size={24} />
-            <div>
-              <span className="admin-stat-value">{totalUsers}</span>
-              <span className="admin-stat-label">Registered Users</span>
-            </div>
-          </div>
-          <div className="admin-stat-card">
             <Icon name="star" size={24} />
             <div>
-              <span className="admin-stat-value">${totalRevenue.toLocaleString()}</span>
+              <span className="admin-stat-value">
+                ${totalRevenue.toLocaleString()}
+              </span>
               <span className="admin-stat-label">Total Revenue</span>
             </div>
           </div>
@@ -71,17 +68,21 @@ export default function Admin() {
                 </tr>
               </thead>
               <tbody>
-                {carList.map(car => (
-                  <tr key={car._id ?? car.id}>
+                {carList.map((car) => (
+                  <tr key={car._id}>
                     <td className="admin-vehicle-cell">
                       <img src={car.image} alt="" width="40" height="30" />
-                      <span>{car.make} {car.model}</span>
+                      <span>
+                        {car.make} {car.model}
+                      </span>
                     </td>
                     <td>{car.category}</td>
                     <td>{car.year}</td>
                     <td>${car.dailyRate.toLocaleString()}</td>
                     <td>
-                      <span className={`admin-status ${car.available ? 'available' : 'rented'}`}>
+                      <span
+                        className={`admin-status ${car.available ? 'available' : 'rented'}`}
+                      >
                         {car.available ? 'Available' : 'Rented'}
                       </span>
                     </td>
@@ -101,7 +102,10 @@ export default function Admin() {
           <h3>All Bookings</h3>
           {bookings.length === 0 ? (
             <div className="admin-empty">
-              <p>No bookings yet. Bookings will appear here once users start renting vehicles.</p>
+              <p>
+                No bookings yet. Bookings will appear here once users start
+                renting vehicles.
+              </p>
             </div>
           ) : (
             <div className="admin-table-wrapper">
@@ -117,21 +121,35 @@ export default function Admin() {
                   </tr>
                 </thead>
                 <tbody>
-                  {bookings.map(b => (
-                    <tr key={b._id ?? b.id}>
+                  {bookings.map((b) => (
+                    <tr key={b._id}>
                       <td>
                         <strong>{b.userName}</strong>
-                        <br /><small style={{ color: 'var(--text-tertiary)' }}>{b.userEmail}</small>
+                        <br />
+                        <small style={{ color: 'var(--text-tertiary)' }}>
+                          {b.userEmail}
+                        </small>
                       </td>
-                      <td>{b.carMake} {b.carModel}</td>
-                      <td>{b.startDate} → {b.endDate}</td>
+                      <td>
+                        {b.carMake} {b.carModel}
+                      </td>
+                      <td>
+                        {b.startDate} → {b.endDate}
+                      </td>
                       <td>${b.total.toLocaleString()}</td>
                       <td>
-                        <span className={`admin-status ${b.paymentStatus === 'paid' ? 'available' : 'rented'}`}>
+                        <span
+                          className={`admin-status ${b.paymentStatus === 'paid' ? 'available' : 'rented'}`}
+                        >
                           {b.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
                         </span>
                       </td>
-                      <td style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)' }}>
+                      <td
+                        style={{
+                          fontSize: '0.8rem',
+                          color: 'var(--text-tertiary)',
+                        }}
+                      >
                         {new Date(b.createdAt).toLocaleDateString()}
                       </td>
                     </tr>

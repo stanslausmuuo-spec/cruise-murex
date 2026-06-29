@@ -1,54 +1,76 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useState, useCallback, useMemo } from 'react';
-import { loginUser, signupUser } from '../api/auth';
+import { createContext, useState, useEffect, useCallback, useMemo } from 'react';
+import { loginUser, signupUser, getProfile } from '../api/auth';
 
 export const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    try {
-      const saved = localStorage.getItem('cruise-user');
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      localStorage.removeItem('cruise-user');
-      return null;
-    }
-  });
-  const loading = false;
+  const [token, setToken] = useState(() => localStorage.getItem('cruise-token'));
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(() => !!localStorage.getItem('cruise-token'));
+
+  useEffect(() => {
+    if (!token) return;
+    let cancelled = false;
+    getProfile(token)
+      .then((profile) => {
+        if (cancelled) return;
+        if (profile) {
+          setUser(profile);
+        } else {
+          localStorage.removeItem('cruise-token');
+          setToken(null);
+        }
+      })
+      .catch(() => {
+        if (cancelled) return;
+        localStorage.removeItem('cruise-token');
+        setToken(null);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
 
   const login = useCallback(async (email, password) => {
-    const userData = await loginUser(email, password);
-    if (!userData) return false;
-    setUser(userData);
-    localStorage.setItem('cruise-user', JSON.stringify(userData));
+    const data = await loginUser(email, password);
+    if (!data) return false;
+    localStorage.setItem('cruise-token', data.token);
+    setToken(data.token);
+    setUser({ id: data.id, name: data.name, email: data.email, role: data.role });
     return true;
   }, []);
 
   const signup = useCallback(async (name, email, password) => {
-    const userData = await signupUser(name, email, password);
-    if (!userData) return false;
-    setUser(userData);
-    localStorage.setItem('cruise-user', JSON.stringify(userData));
+    const data = await signupUser(name, email, password);
+    if (!data) return false;
+    localStorage.setItem('cruise-token', data.token);
+    setToken(data.token);
+    setUser({ id: data.id, name: data.name, email: data.email, role: data.role });
     return true;
   }, []);
 
   const logout = useCallback(() => {
+    localStorage.removeItem('cruise-token');
+    setToken(null);
     setUser(null);
-    localStorage.removeItem('cruise-user');
+    setLoading(false);
   }, []);
 
-  const value = useMemo(() => ({
-    user,
-    loading,
-    login,
-    signup,
-    logout,
-    isAdmin: user?.role === 'admin',
-  }), [user, loading, login, signup, logout]);
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({
+      user,
+      token,
+      loading,
+      login,
+      signup,
+      logout,
+      isAdmin: user?.role === 'admin',
+    }),
+    [user, token, loading, login, signup, logout],
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

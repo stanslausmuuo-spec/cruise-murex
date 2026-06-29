@@ -14,11 +14,16 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const success = await login(email, password);
-    if (success) {
-      navigate('/dashboard');
-    } else {
-      setError('Invalid email or password. Try admin@cruise.com / admin123');
+    try {
+      const success = await login(email, password);
+      if (success) {
+        navigate('/dashboard');
+      } else {
+        setError('Invalid email or password.');
+      }
+    } catch (err) {
+      setError(err.message || 'Login failed. Check the console for details.');
+      console.error('Login error:', err);
     }
   };
 
@@ -68,10 +73,6 @@ export default function Login() {
 
         <p className="auth-footer-text">
           Don't have an account? <Link to="/signup">Sign up</Link>
-        </p>
-
-        <p className="auth-demo">
-          Demo: admin@cruise.com / admin123
         </p>
       </div>
     </main>

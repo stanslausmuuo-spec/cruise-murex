@@ -1,18 +1,22 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
+import { getUserFromToken, requireAuth, requireAdmin } from './lib/auth';
 
 export const list = query({
-  args: {},
-  handler: async (ctx) => {
+  args: { token: v.string() },
+  handler: async (ctx, args) => {
+    await requireAdmin(ctx, args.token);
     return await ctx.db.query('bookings').order('desc').collect();
   },
 });
 
 export const getByUser = query({
-  args: { userId: v.id('users') },
+  args: { token: v.string() },
   handler: async (ctx, args) => {
-    return await ctx.db.query('bookings')
-      .withIndex('by_userId', q => q.eq('userId', args.userId))
+    const user = await requireAuth(ctx, args.token);
+    return await ctx.db
+      .query('bookings')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .order('desc')
       .collect();
   },
@@ -20,9 +24,7 @@ export const getByUser = query({
 
 export const create = mutation({
   args: {
-    userId: v.id('users'),
-    userName: v.string(),
-    userEmail: v.string(),
+    token: v.string(),
     carId: v.id('cars'),
     carMake: v.string(),
     carModel: v.string(),
@@ -34,8 +36,20 @@ export const create = mutation({
     dailyRate: v.number(),
   },
   handler: async (ctx, args) => {
+    const user = await requireAuth(ctx, args.token);
     const id = await ctx.db.insert('bookings', {
-      ...args,
+      userId: user._id,
+      userName: user.name,
+      userEmail: user.email,
+      carId: args.carId,
+      carMake: args.carMake,
+      carModel: args.carModel,
+      carImage: args.carImage,
+      startDate: args.startDate,
+      endDate: args.endDate,
+      days: args.days,
+      total: args.total,
+      dailyRate: args.dailyRate,
       status: 'confirmed',
       paymentStatus: 'pending',
       createdAt: new Date().toISOString(),
@@ -45,10 +59,14 @@ export const create = mutation({
 });
 
 export const processPayment = mutation({
-  args: { bookingId: v.id('bookings') },
+  args: { bookingId: v.id('bookings'), token: v.string() },
   handler: async (ctx, args) => {
+    const user = await requireAuth(ctx, args.token);
     const booking = await ctx.db.get(args.bookingId);
-    if (!booking) return false;
+    if (!booking) throw new Error('Booking not found');
+    if (booking.userId !== user._id && user.role !== 'admin') {
+      throw new Error('Not authorized to process this payment');
+    }
     await ctx.db.patch(args.bookingId, {
       paymentStatus: 'paid',
       paidAt: new Date().toISOString(),

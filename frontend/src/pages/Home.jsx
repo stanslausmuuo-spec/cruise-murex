@@ -61,7 +61,7 @@ export default function Home() {
         </div>
         <div className="featured-grid">
           {featured.map((car, i) => (
-            <CarCard key={car._id ?? car.id} car={car} index={i} />
+            <CarCard key={car._id} car={car} index={i} />
           ))}
         </div>
         <div className="featured-cta">

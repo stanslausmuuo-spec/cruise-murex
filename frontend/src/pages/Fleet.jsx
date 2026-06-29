@@ -17,12 +17,12 @@ export default function Fleet() {
     if (search) {
       const q = search.toLowerCase();
       result = result.filter(
-        c => c.make.toLowerCase().includes(q) || c.model.toLowerCase().includes(q)
+        (c) => c.make.toLowerCase().includes(q) || c.model.toLowerCase().includes(q),
       );
     }
 
     if (selectedCategory !== 'All') {
-      result = result.filter(c => c.category === selectedCategory);
+      result = result.filter((c) => c.category === selectedCategory);
     }
 
     if (sortBy === 'price-asc') result.sort((a, b) => a.dailyRate - b.dailyRate);
@@ -56,11 +56,15 @@ export default function Fleet() {
               type="text"
               placeholder="Search by make or model..."
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               aria-label="Search vehicles"
             />
             {search && (
-              <button className="fleet-clear-search" onClick={() => setSearch('')} aria-label="Clear search">
+              <button
+                className="fleet-clear-search"
+                onClick={() => setSearch('')}
+                aria-label="Clear search"
+              >
                 <Icon name="close" size={16} />
               </button>
             )}
@@ -69,18 +73,20 @@ export default function Fleet() {
           <div className="fleet-filters">
             <select
               value={selectedCategory}
-              onChange={e => setSelectedCategory(e.target.value)}
+              onChange={(e) => setSelectedCategory(e.target.value)}
               aria-label="Filter by category"
             >
               <option value="All">All Categories</option>
-              {categoryList.map(c => (
-                <option key={c} value={c}>{c}</option>
+              {categoryList.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
               ))}
             </select>
 
             <select
               value={sortBy}
-              onChange={e => setSortBy(e.target.value)}
+              onChange={(e) => setSortBy(e.target.value)}
               aria-label="Sort vehicles"
             >
               <option value="">Sort By</option>
@@ -101,7 +107,7 @@ export default function Fleet() {
         {filteredCars.length > 0 ? (
           <div className="fleet-grid">
             {filteredCars.map((car, i) => (
-              <CarCard key={car._id ?? car.id} car={car} index={i} />
+              <CarCard key={car._id} car={car} index={i} />
             ))}
           </div>
         ) : (

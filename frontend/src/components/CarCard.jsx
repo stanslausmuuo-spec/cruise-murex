@@ -39,7 +39,7 @@ export default function CarCard({ car, index = 0 }) {
             <span className="car-card-price-value">${car.dailyRate.toLocaleString()}</span>
             <span className="car-card-price-label">/ day</span>
           </div>
-          <Link to={`/cars/${car._id ?? car.id}`} className="car-card-btn">
+          <Link to={`/cars/${car._id}`} className="car-card-btn">
             Rent Now
             <Icon name="arrow-right" size={16} />
           </Link>

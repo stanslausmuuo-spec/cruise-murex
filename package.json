@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint frontend/src",
     "convex": "npx convex",
-    "seed": "npx convex run seed:seedAll"
+    "seed": "npx convex run seed:seedAll",
+    "migrate-passwords": "npx convex run migratePasswords:migratePasswords"
   },
   "dependencies": {
     "convex": "^1.41.0",
