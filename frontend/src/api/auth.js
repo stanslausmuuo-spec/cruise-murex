@@ -1,5 +1,5 @@
 import { convex } from '../lib/convex';
-import { api } from '../../../convex/_generated/api';
+import { anyApi as api } from 'convex/server';
 
 export async function loginUser(email, password) {
   return await convex.mutation(api.users.login, { email, password });
