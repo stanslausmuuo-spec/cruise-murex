@@ -1,30 +1,31 @@
 import { useQuery, useMutation } from 'convex/react';
+import { api } from '../../../convex/_generated/api';
 import useAuth from '../hooks/useAuth';
 
 export function useUserBookings() {
   const { token } = useAuth();
-  const result = useQuery('bookings:getByUser', token ? { token } : 'skip');
+  const result = useQuery(api.bookings.getByUser, token ? { token } : 'skip');
   return result ?? [];
 }
 
 export function useAllBookings() {
   const { token } = useAuth();
-  const result = useQuery('bookings:list', token ? { token } : 'skip');
+  const result = useQuery(api.bookings.list, token ? { token } : 'skip');
   return result ?? [];
 }
 
 export function useCreateBooking() {
   const { token } = useAuth();
-  const createConvex = useMutation('bookings:create');
+  const createBooking = useMutation(api.bookings.create);
   return async (payload) => {
-    return await createConvex({ ...payload, token });
+    return await createBooking({ ...payload, token });
   };
 }
 
 export function useProcessPayment() {
   const { token } = useAuth();
-  const processConvex = useMutation('bookings:processPayment');
+  const processPayment = useMutation(api.bookings.processPayment);
   return async (bookingId) => {
-    await processConvex({ bookingId, token });
+    await processPayment({ bookingId, token });
   };
 }

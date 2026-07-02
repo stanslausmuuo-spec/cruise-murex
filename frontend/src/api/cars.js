@@ -1,19 +1,20 @@
 import { useQuery } from 'convex/react';
+import { api } from '../../../convex/_generated/api';
 
 export function useCars() {
-  return useQuery('cars:list') ?? [];
+  return useQuery(api.cars.list) ?? [];
 }
 
 export function useCar(id) {
-  return useQuery('cars:getById', { id });
+  return useQuery(api.cars.getById, { id });
 }
 
 export function useFeaturedCars() {
-  const result = useQuery('cars:getFeatured');
+  const result = useQuery(api.cars.getFeatured);
   return result ?? [];
 }
 
 export function useCategories() {
-  const result = useQuery('cars:getCategories');
+  const result = useQuery(api.cars.getCategories);
   return result ?? [];
 }
